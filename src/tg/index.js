@@ -11,6 +11,7 @@ function irc_to_html_format(text) {
     text = text.replace(/\x1D(.*?)\x1D/g, '<i>$1</i>');
     text = text.replace(/\x1D(.*)/g, '<i>$1</i>');
     return text;
+}
 
 var init = function(msgCallback) {
     // start HTTP server for media files if configured to do so
