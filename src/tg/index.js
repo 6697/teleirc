@@ -5,6 +5,14 @@ var logger = require('winston');
 
 var myUser = {};
 
+function irc_to_html_format(text) {
+    text = text.replace(/\x02(.*?)\x02/g, '<b>$1</b>');
+    text = text.replace(/\x02(.*)/g, '<b>$1</b>');
+    text = text.replace(/\x1D(.*?)\x1D/g, '<i>$1</i>');
+    text = text.replace(/\x1D(.*)/g, '<i>$1</i>');
+    return text;
+}
+
 var init = function(msgCallback) {
     // start HTTP server for media files if configured to do so
     if (config.showMedia) {
@@ -64,11 +72,11 @@ var init = function(msgCallback) {
             }
 
             if (message.user) {
-                message.text = '<' + message.user + '> ' + message.text;
+                message.text = '<' + message.user + '> ' + irc_to_html_format(message.text);
             }
 
             logger.verbose('>> relaying to TG:', message.text);
-            tg.sendMessage(message.channel.tgChatId, message.text);
+            tg.sendMessage(message.channel.tgChatId, message.text, parse_mode=telegram.ParseMode.HTML);
         }
     };
 };
